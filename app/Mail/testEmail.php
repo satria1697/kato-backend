@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Data\Cart;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -11,14 +12,18 @@ class testEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $cart;
+    public $name;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($cart, $name)
     {
-        //
+        $this->cart = $cart;
+        $this->name = $name;
     }
 
     /**

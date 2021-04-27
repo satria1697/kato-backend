@@ -24,7 +24,7 @@ class CartController extends BaseController
         }
         $cart = new Cart();
         $cart['user_id'] = $jwt->id;
-        $cart['kratom_id'] = $request['id'];
+        $cart['goods_id'] = $request['id'];
         $cart['buying'] = $request['buying'];
         $cart['status'] = $request['status'];
         if ($cart->save()) {
@@ -37,11 +37,11 @@ class CartController extends BaseController
     public function show(Request $request) {
         $jwt = $this->checkJwt($request->input('jwt'));
         $id = $jwt->id;
-        $cart = User::with('cart', 'cart.kratom')->where('id', $id)->first();
+        $cart = User::with('cart', 'cart.goods')->where('id', $id)->first();
         foreach ($cart['cart'] as $car) {
-            $kratom = $car['kratom'];
-            if ($kratom['image']) {
-                $kratom['image'] = 'data:image/png;base64,' . base64_encode(Storage::get($kratom['image']));
+            $goods = $car['goods'];
+            if ($goods['image']) {
+                $goods['image'] = 'data:image/png;base64,' . base64_encode(Storage::get($goods['image']));
             }
             $car['buying'] += 0;
         }
@@ -61,14 +61,12 @@ class CartController extends BaseController
 
     public function checkout(Request $request) {
         $decode = $this->checkJwt($request['jwt']);
-        $to_name = 'andhika';
-        $to_email = 'andhikasatriab@gmail.com';
-        $data = array(
-            'name' => 'testonetwo',
-            'body' => 'testBody'
-        );
-//        return $this->sendResponse(\config('mail.from'), 'success');
-        Mail::to('andhikasatriab@gmail.com')->send(new testEmail());
-        return $this->sendResponse('andhikasatriab@gmail.com', 'success');
+        $name = 'Lukito';
+        $to_email = 'Lkusdewanto@gmail.com';
+        $cart = Cart::with('goods')
+            ->where('user_id', $decode->id)
+            ->get();
+        Mail::to($to_email)->send(new testEmail($cart, $name));
+        return $this->sendResponse($to_email, 'success');
     }
 }

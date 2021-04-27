@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Models\Data\Cart;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +17,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/email', function () {
-   return view('emails/mail');
+    $cart = Cart::with('goods')
+            ->where('user_id', 1)
+            ->get();
+    return view('emails.mail', ['cart' => $cart, 'name' => 'Carlos']);
 });
 
 Route::post('login', [AuthController::class, 'login']);

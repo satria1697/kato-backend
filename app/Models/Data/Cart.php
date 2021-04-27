@@ -10,7 +10,7 @@ class Cart extends Model
     use HasFactory;
     protected $table="cart";
 
-    public function kratom() {
-        return $this->hasOne(Kratom::class, 'id', 'kratom_id');
+    public function goods() {
+        return $this->hasOne(Goods::class, 'id', 'goods_id');
     }
 }
