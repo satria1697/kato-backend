@@ -7,13 +7,8 @@ use App\Mail\testEmail;
 use App\Models\Data\Cart;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
-use Mockery\Exception\InvalidOrderException;
 
 class CartController extends BaseController
 {

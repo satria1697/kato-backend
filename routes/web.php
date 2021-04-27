@@ -23,4 +23,8 @@ Route::get('/email', function () {
     return view('emails.mail', ['cart' => $cart, 'name' => 'Carlos']);
 });
 
+Route::get('/emailverif', function () {
+    return view("emails.verifmail", ['code' => 11827382]);
+});
+
 Route::post('login', [AuthController::class, 'login']);
