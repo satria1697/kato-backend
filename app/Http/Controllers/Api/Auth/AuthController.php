@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Mail;
 
 class AuthController extends BaseController
 {
+    public $key = 'bvMp8EzdcXZjUn0f5K3vOCblCL6xoRk4';
+
     public function register(Request $request) {
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
@@ -23,7 +25,14 @@ class AuthController extends BaseController
         $success['token'] =  $user->createToken('Kratom')->accessToken;
         $success['name'] =  $user['name'];
         $success['level'] =  $user['level_id'];
-        Mail::to($input['email'])->send(new VerificationMail($code));
+        $payload = array(
+            "email" => $user['email'],
+            "code" => $code
+        );
+        $jwt = JWT::encode($payload, $this->key);
+        $link = $jwt;
+        $web = 'http://192.168.100.140:3000/register/verification?key=';
+        Mail::to($input['email'])->send(new VerificationMail($web.$link));
         return $this->sendResponse($success, 'User register successfully.');
     }
 
@@ -37,7 +46,6 @@ class AuthController extends BaseController
             if ($user['level_id'] > 8) {
                 return $this->sendError('user-blocked');
             }
-            $key = 'bvMp8EzdcXZjUn0f5K3vOCblCL6xoRk4';
             $success['token'] = $user->createToken('Kratom')->accessToken;
             $payload = array(
                 "user" => $user['name'],
@@ -45,7 +53,7 @@ class AuthController extends BaseController
                 "id" => $user['id'],
                 "email" => $user['email']
             );
-            $jwt = JWT::encode($payload, $key);
+            $jwt = JWT::encode($payload, $this->key);
             $success['jwt'] = $jwt;
             return $this->sendResponse($success, 'user-login');
         }

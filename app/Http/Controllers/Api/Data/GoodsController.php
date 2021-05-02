@@ -10,10 +10,14 @@ use Illuminate\Support\Facades\Storage;
 class GoodsController extends BaseController
 {
     public function store(Request $request) {
+        $decode = $this->checkJwt($request['jwt']);
+        if ($decode['level'] > 2) {
+            return $this->sendError('not-authorized');
+        }
         $base64 = $request['image'];
         if ($base64) {
-            $image = base64_decode(str_replace('data:image/png;base64,', '', $base64));
-            $path = 'images/'.$request['name'].'.png';
+            $image = base64_decode(str_replace('data:image/jpg;base64,', '', $base64));
+            $path = 'images/'.$request['name'].'.jpg';
             Storage::put($path, $image);
         } else {
             $path = null;
@@ -42,13 +46,17 @@ class GoodsController extends BaseController
         }
         foreach ($goods as $good) {
             if ($good['image']) {
-                $good['image'] = 'data:image/png;base64,' . base64_encode(Storage::get($goods['image']));
+                $good['image'] = 'data:image/jpg;base64,' . base64_encode(Storage::get($goods['image']));
             }
         }
         return $this->sendResponse($goods, 'success');
     }
 
-    public function delete($id) {
+    public function delete(Request $request, $id) {
+        $decode = $this->checkJwt($request['jwt']);
+        if ($decode['level'] > 2) {
+            return $this->sendError('not-authorized');
+        }
         $goods = Goods::find($id);
         if ($goods) {
             if ($goods->delete()) {
@@ -64,7 +72,7 @@ class GoodsController extends BaseController
     public function view($id) {
         $goods = Goods::with('category')->where('id', $id)->first();
         if ($goods['image']) {
-            $goods['image'] = 'data:image/png;base64,' . base64_encode(Storage::get($goods['image']));
+            $goods['image'] = 'data:image/jpg;base64,' . base64_encode(Storage::get($goods['image']));
         }
         if ($goods) {
             return $this->sendResponse($goods, 'success');
@@ -74,14 +82,18 @@ class GoodsController extends BaseController
     }
 
     public function update(Request $request, $id) {
+        $decode = $this->checkJwt($request['jwt']);
+        if ($decode['level'] > 2) {
+            return $this->sendError('not-authorized');
+        }
         $goods = Goods::find($id);
         if (!$goods) {
             return $this->sendError('error', ['error' => 'not-found']);
         }
         $base64 = $request['image'];
         if ($base64) {
-            $image = base64_decode(str_replace('data:image/png;base64,', '', $base64));
-            $path = 'images/'.$request['name'].'.png';
+            $image = base64_decode(str_replace('data:image/jpg;base64,', '', $base64));
+            $path = 'images/'.$request['name'].'.jpg';
             Storage::put($path, $image);
         } else if ($goods['image']) {
             $path = $goods['image'];

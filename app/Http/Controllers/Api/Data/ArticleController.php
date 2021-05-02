@@ -14,7 +14,7 @@ class ArticleController extends BaseController
         $data = Article::all();
         foreach ($data as $da) {
             if ($da['image']) {
-                $da['image'] = 'data:image/png;base64,' . base64_encode(Storage::get($da['image']));
+                $da['image'] = 'data:image/jpg;base64,' . base64_encode(Storage::get($da['image']));
             }
         }
         return $this->sendResponse($data, "success-get");
@@ -26,17 +26,21 @@ class ArticleController extends BaseController
             $this->sendError('not-found');
         }
         if ($data['image']) {
-            $data['image'] = 'data:image/png;base64,' . base64_encode(Storage::get($data['image']));
+            $data['image'] = 'data:image/jpg;base64,' . base64_encode(Storage::get($data['image']));
         }
         return $this->sendResponse($data, "success-get");
     }
 
     public function store(Request $request) {
+        $decode = $this->checkJwt($request['jwt']);
+        if ($decode['level'] > 2) {
+            return $this->sendError('not-authorized');
+        }
         $now = Carbon::now()->unix();
         $base64 = $request['image'];
         if ($base64) {
-            $image = base64_decode(str_replace('data:image/png;base64,', '', $base64));
-            $path = 'images/article/'.$now.'.png';
+            $image = base64_decode(str_replace('data:image/jpg;base64,', '', $base64));
+            $path = 'images/article/'.$now.'.jpg';
             Storage::put($path, $image);
         } else {
             $path = null;
@@ -55,6 +59,10 @@ class ArticleController extends BaseController
     }
 
     public function update(Request $request, $slug) {
+        $decode = $this->checkJwt($request['jwt']);
+        if ($decode['level'] > 2) {
+            return $this->sendError('not-authorized');
+        }
         $now = Carbon::now()->unix();
         $article = Article::where('slug', $slug)->first();
         if (!$article) {
@@ -62,8 +70,8 @@ class ArticleController extends BaseController
         }
         $base64 = $request['image'];
         if ($base64) {
-            $image = base64_decode(str_replace('data:image/png;base64,', '', $base64));
-            $path = 'images/article/'.$now.'.png';
+            $image = base64_decode(str_replace('data:image/jpg;base64,', '', $base64));
+            $path = 'images/article/'.$now.'.jpg';
             Storage::put($path, $image);
         } else {
             $path = null;
@@ -79,7 +87,11 @@ class ArticleController extends BaseController
         return $this->sendResponse(true, 'success');
     }
 
-    public function remove($id) {
+    public function remove(Request $request, $id) {
+        $decode = $this->checkJwt($request['jwt']);
+        if ($decode['level'] > 2) {
+            return $this->sendError('not-authorized');
+        }
         $article = Article::find($id);
         if (!$article) {
             $this->sendError('not-found');

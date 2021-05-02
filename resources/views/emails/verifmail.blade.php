@@ -7,11 +7,10 @@
     <title>Email</title>
 </head>
 <body>
-    <div style="width: 75%; margin: 0 auto;">
-        <p>Please copy folowing code, to kratomedical.com</p>
-        <div style="width: 100%; max-width: 120px; margin: 0 auto; background: #696969; padding: 1rem 1.5rem; display: flex; justify-content: center; color: white; font-size: 24px; border-radius: 1rem;">
-            <span>{{$code}}</span>
-        </div>
+    <div>
+        <p>Please Click this link to verify ur email</p>
+        <p style="margin-left: 2rem; margin-bottom: 2rem;">{{$code}}</p>
+        <p>Sincere, Kratom Medical</p>
     </div>
 </body>
 </html>

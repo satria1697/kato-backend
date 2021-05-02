@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Data;
 
 use App\Http\Controllers\Api\BaseController;
-use App\Mail\testEmail;
+use App\Mail\CheckoutEmail;
 use App\Models\Data\Cart;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -61,7 +61,7 @@ class CartController extends BaseController
         $cart = Cart::with('goods')
             ->where('user_id', $decode->id)
             ->get();
-        Mail::to($to_email)->send(new testEmail($cart, $name));
+        Mail::to($to_email)->send(new CheckoutEmail($cart, $name));
         return $this->sendResponse($to_email, 'success');
     }
 }
