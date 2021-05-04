@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Auth\ProfileController;
 use App\Http\Controllers\Api\Data\CategoriesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,4 +37,10 @@ Route::prefix('/article')->group(function () {
         Route::post('', [\App\Http\Controllers\Api\Data\ArticleController::class, 'store']);
         Route::delete('{id}', [\App\Http\Controllers\Api\Data\ArticleController::class, 'remove']);
     });
+});
+
+Route::prefix('/profile')->group(function () {
+    Route::get('{id}', [ProfileController::class, 'show']);
+    Route::get('', [ProfileController::class, 'index']);
+    Route::post('{id}', [ProfileController::class, 'update']);
 });

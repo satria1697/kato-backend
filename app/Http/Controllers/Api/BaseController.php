@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class BaseController extends Controller
 {
@@ -33,5 +35,25 @@ class BaseController extends Controller
             $response['data'] = $errorMessages;
         }
         return Response::json($response, $code);
+    }
+
+    public function base64ToImg($where, $base64) {
+        $now = $this->unixNow();
+        if ($base64) {
+            $image = base64_decode(str_replace('data:image/jpg;base64,', '', $base64));
+            $path = 'images/'.$where.'/'.$now.'.jpg';
+            Storage::put($path, $image);
+        } else {
+            $path = null;
+        }
+        return $path;
+    }
+
+    public function imgToBase64($where) {
+        return 'data:image/jpg;base64,' . base64_encode(Storage::get($where));
+    }
+
+    public function unixNow() {
+        return Carbon::now()->unix();
     }
 }

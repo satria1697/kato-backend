@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Api\BaseController;
 use App\Mail\VerificationMail;
+use App\Models\Profile;
 use App\Models\User;
 use Carbon\Carbon;
 use Firebase\JWT\JWT;
@@ -31,8 +32,13 @@ class AuthController extends BaseController
         );
         $jwt = JWT::encode($payload, $this->key);
         $link = $jwt;
-        $web = 'http://192.168.100.140:3000/register/verification?key=';
+        $web = 'http://localhost:3000/register/verification?key=';
         Mail::to($input['email'])->send(new VerificationMail($web.$link));
+
+        $profile = new Profile();
+        $profile['name'] = $input['name'];
+        $profile['user_id'] = $user['id'];
+        $profile->save();
         return $this->sendResponse($success, 'User register successfully.');
     }
 

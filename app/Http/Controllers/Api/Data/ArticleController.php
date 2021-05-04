@@ -14,7 +14,7 @@ class ArticleController extends BaseController
         $data = Article::all();
         foreach ($data as $da) {
             if ($da['image']) {
-                $da['image'] = 'data:image/jpg;base64,' . base64_encode(Storage::get($da['image']));
+                $da['image'] = $this->imgToBase64($da['image']);
             }
         }
         return $this->sendResponse($data, "success-get");
@@ -26,7 +26,7 @@ class ArticleController extends BaseController
             $this->sendError('not-found');
         }
         if ($data['image']) {
-            $data['image'] = 'data:image/jpg;base64,' . base64_encode(Storage::get($data['image']));
+            $data['image'] = $this->imgToBase64($data['image']);
         }
         return $this->sendResponse($data, "success-get");
     }
@@ -36,22 +36,15 @@ class ArticleController extends BaseController
         if ($decode['level'] > 2) {
             return $this->sendError('not-authorized');
         }
-        $now = Carbon::now()->unix();
         $base64 = $request['image'];
-        if ($base64) {
-            $image = base64_decode(str_replace('data:image/jpg;base64,', '', $base64));
-            $path = 'images/article/'.$now.'.jpg';
-            Storage::put($path, $image);
-        } else {
-            $path = null;
-        }
+        $path = $this->base64ToImg('article', $base64);
         $article = new Article();
         $article['title'] = $request['title'];
         $article['brief'] = $request['brief'];
         $article['text'] = $request['text'];
         $article['show'] = $request['show'];
         $article['image'] = $path;
-        $article['slug'] = $this->sluging($request['title']).'-'.$now;
+        $article['slug'] = $this->sluging($request['title']).'-'.$this->unixNow();
         if (!$article->save()) {
             return $this->sendError("error-get");
         }
@@ -69,13 +62,7 @@ class ArticleController extends BaseController
             return $this->sendError('not-found');
         }
         $base64 = $request['image'];
-        if ($base64) {
-            $image = base64_decode(str_replace('data:image/jpg;base64,', '', $base64));
-            $path = 'images/article/'.$now.'.jpg';
-            Storage::put($path, $image);
-        } else {
-            $path = null;
-        }
+        $path = $this->base64ToImg('article', $base64);
         $article['title'] = $request['title'];
         $article['brief'] = $request['brief'];
         $article['text'] = $request['text'];
