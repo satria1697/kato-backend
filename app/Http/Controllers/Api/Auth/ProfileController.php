@@ -10,16 +10,24 @@ use Illuminate\Http\Request;
 class ProfileController extends BaseController
 {
     public function index() {
-        $data = User::with('profile')->all();
+        $data = User::with('profile', 'verification')->all();
         return $this->sendResponse($data, 'success');
     }
 
     public function show($id) {
-        $data = User::with('profile')->where('id', $id)->first();
-        return $this->sendResponse($data, 'success');
+        $data = User::with('profile', 'verification', 'verification.id_status', 'verification.company_status')->where('id', $id)->first();
         if (!$data) {
             return $this->sendError('not-found');
         }
+
+        if ($data->verification['id_card']) {
+            $data->verification['id_card'] = $this->imgToBase64($data->verification['id_card']);
+        }
+
+        if ($data->verification['company_card']) {
+            $data->verification['company_card'] = $this->imgToBase64($data->verification['company_card']);
+        }
+
         return $this->sendResponse($data, 'success');
     }
 

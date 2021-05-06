@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Api\BaseController;
 use App\Mail\VerificationMail;
+use App\Models\Data\Verification;
 use App\Models\Profile;
 use App\Models\User;
 use Carbon\Carbon;
@@ -39,6 +40,11 @@ class AuthController extends BaseController
         $profile['name'] = $input['name'];
         $profile['user_id'] = $user['id'];
         $profile->save();
+
+        $verification = new Verification();
+        $verification['user_id'] = $user['id'];
+        $verification->save();
+
         return $this->sendResponse($success, 'User register successfully.');
     }
 

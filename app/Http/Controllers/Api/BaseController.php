@@ -40,7 +40,7 @@ class BaseController extends Controller
     public function base64ToImg($where, $base64) {
         $now = $this->unixNow();
         if ($base64) {
-            $image = base64_decode(str_replace('data:image/jpg;base64,', '', $base64));
+            $image = base64_decode(str_replace('data:image/png;base64,', '', $base64));
             $path = 'images/'.$where.'/'.$now.'.jpg';
             Storage::put($path, $image);
         } else {

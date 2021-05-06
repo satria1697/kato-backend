@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Data\Cart;
+use App\Models\Data\Verification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -54,5 +55,8 @@ class User extends Authenticatable
 
     public function profile() {
         return $this->hasOne(Profile::class);
+    }
+    public function verification() {
+        return $this->hasOne(Verification::class);
     }
 }
