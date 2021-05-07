@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Auth\ProfileController;
 use App\Http\Controllers\Api\Data\CategoriesController;
 use App\Http\Controllers\Api\Data\VerificationController;
+use App\Http\Controllers\Api\Data\VerificationStatusController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -47,8 +48,8 @@ Route::prefix('/profile')->group(function () {
 });
 
 Route::prefix('/id.verification')->group(function() {
-    Route::post('{id}', [VerificationController::class, 'update']);
     Route::prefix('/status')->group(function() {
-        Route::get('{id}', [VerificationController::class, 'index']);
+        Route::get('', [VerificationStatusController::class, 'index']);
     });
+    Route::post('{id}', [VerificationController::class, 'update']);
 });

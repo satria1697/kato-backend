@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class ProfileController extends BaseController
 {
     public function index() {
-        $data = User::with('profile', 'verification')->all();
+        $data = User::with('profile', 'verification')->get();
         return $this->sendResponse($data, 'success');
     }
 

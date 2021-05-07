@@ -11,6 +11,6 @@ class VerificationStatusController extends BaseController
 {
     public function index() {
         $data = VerificationStatus::all();
-        return $this->sendResponse(true, 'success');
+        return $this->sendResponse($data, 'success');
     }
 }
