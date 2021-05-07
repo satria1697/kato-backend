@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\Data;
 
 use App\Http\Controllers\Api\BaseController;
-use App\Http\Controllers\Controller;
 use App\Models\Data\Verification;
 use Illuminate\Http\Request;
 
@@ -28,6 +27,24 @@ class VerificationController extends BaseController
             $data["company_card_status"] = 2;
         }
         $data["company_id"] = $input['companyId'];
+        if (!$data->save()) {
+            return $this->sendError('cant-save');
+        }
+        return $this->sendResponse(true, 'success');
+    }
+
+    public function updateStatus(Request $request, $id) {
+        $decode = $this->checkJwt($request['jwt']);
+        if ($decode->level > 2) {
+            $this->sendError('not-authenticated');
+        }
+        $data = Verification::where('id', $id)->first();
+        if (!$data) {
+            return $this->sendError('not-found');
+        }
+        $input = $request->all();
+        $data['company_card_status'] = $input['companyCardStatus'];
+        $data['id_card_status'] = $input['idCardStatus'];
         if (!$data->save()) {
             return $this->sendError('cant-save');
         }
