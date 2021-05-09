@@ -47,10 +47,10 @@ class VerificationController extends BaseController
         $data['company_card_status'] = $input['companyCardStatus'];
         $data['id_card_status'] = $input['idCardStatus'];
 
-
-        if ($input['level']) {
+        if ($input['level'] > 0) {
             $user = User::where('id', $decode->id)->first();
-            $user['level'] = $input['level'];
+            $user['level_id'] = $input['level'];
+            $user->save();
         }
 
         if (!$data->save()) {

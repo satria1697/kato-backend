@@ -33,7 +33,7 @@ class GoodsController extends BaseController
         if ($goods->save()) {
             return $this->sendResponse($goods, 'success');
         } else {
-            return $this->sendError('error', ['error'=> 'error-save']);
+            return $this->sendError('error', ['error' => 'error-save']);
         }
     }
 
@@ -83,7 +83,7 @@ class GoodsController extends BaseController
 
     public function update(Request $request, $id) {
         $decode = $this->checkJwt($request['jwt']);
-        if ($decode['level'] > 2) {
+        if ($decode->level > 2) {
             return $this->sendError('not-authorized');
         }
         $goods = Goods::find($id);
