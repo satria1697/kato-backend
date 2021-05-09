@@ -15,7 +15,7 @@ class ProfileController extends BaseController
     }
 
     public function show($id) {
-        $data = User::with('profile', 'verification', 'verification.id_status', 'verification.company_status')->where('id', $id)->first();
+        $data = User::with('level', 'profile', 'verification', 'verification.id_status', 'verification.company_status')->where('id', $id)->first();
         if (!$data) {
             return $this->sendError('not-found');
         }

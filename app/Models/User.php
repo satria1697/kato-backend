@@ -59,4 +59,8 @@ class User extends Authenticatable
     public function verification() {
         return $this->hasOne(Verification::class);
     }
+
+    public function level() {
+        return $this->hasOne(Level::class, 'id', 'level_id');
+    }
 }

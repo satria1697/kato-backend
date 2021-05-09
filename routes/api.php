@@ -48,10 +48,10 @@ Route::prefix('/profile')->group(function () {
 });
 
 Route::prefix('/id.verification')->group(function() {
+    Route::prefix('/status')->group(function() {
+        Route::get('', [VerificationStatusController::class, 'index']);
+    });
     Route::middleware(['auth:api'])->group(function () {
-        Route::prefix('/status')->group(function() {
-            Route::get('', [VerificationStatusController::class, 'index']);
-        });
         Route::post('/updateStatus/{id}', [VerificationController::class, 'updateStatus']);
         Route::post('{id}', [VerificationController::class, 'update']);
     });
