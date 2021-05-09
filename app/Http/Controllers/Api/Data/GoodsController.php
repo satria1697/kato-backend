@@ -11,7 +11,7 @@ class GoodsController extends BaseController
 {
     public function store(Request $request) {
         $decode = $this->checkJwt($request['jwt']);
-        if ($decode['level'] > 2) {
+        if ($decode->level > 2) {
             return $this->sendError('not-authorized');
         }
         $base64 = $request['image'];

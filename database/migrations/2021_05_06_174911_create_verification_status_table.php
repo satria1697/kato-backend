@@ -17,13 +17,14 @@ class CreateVerificationStatusTable extends Migration
         Schema::create('verification_status', function (Blueprint $table) {
             $table->id();
             $table->string("description");
+            $table->string("color");
         });
 
         DB::table('verification_status')->insert(array(
-            ['description' => 'Verified'],
-            ['description' => 'Pending'],
-            ['description' => 'Empty'],
-            ['description' => 'Rejected'],
+            ['description' => 'Verified', 'color' => '#00cf18'],
+            ['description' => 'Pending', 'color' => '#c6c90'],
+            ['description' => 'Empty', 'color' => '#cfcfcf'],
+            ['description' => 'Rejected', 'color' => '#ff4d4d'],
         ));
     }
 

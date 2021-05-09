@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Data;
 
 use App\Http\Controllers\Api\BaseController;
 use App\Models\Data\Verification;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class VerificationController extends BaseController
@@ -45,6 +46,13 @@ class VerificationController extends BaseController
         $input = $request->all();
         $data['company_card_status'] = $input['companyCardStatus'];
         $data['id_card_status'] = $input['idCardStatus'];
+
+
+        if ($input['level']) {
+            $user = User::where('id', $decode->id)->first();
+            $user['level'] = $input['level'];
+        }
+
         if (!$data->save()) {
             return $this->sendError('cant-save');
         }
