@@ -9,11 +9,7 @@ use Illuminate\Http\Request;
 
 class LevelController extends BaseController
 {
-    public function index(Request $request) {
-        $decode = $this->checkJwt($request['jwt']);
-        if ($decode->level > 2) {
-            return $this->sendError('not-authenticated');
-        }
+    public function index() {
         $data = Level::all();
         return $this->sendResponse($data, 'success');
     }

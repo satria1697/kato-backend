@@ -32,12 +32,7 @@ class ProfileController extends BaseController
     }
 
     public function update(Request $request, $id) {
-        $decode = $this->checkJwt($request['jwt']);
-        if ($decode->level > 9) {
-            return $this->sendError('not-authorized');
-        }
         $input = $request->all();
-
         $data = Profile::where('user_id', $id)->first();
         $data['name'] = $input['name'];
         $data['company'] = $input['company'];

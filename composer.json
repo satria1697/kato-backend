@@ -11,10 +11,10 @@
         "php": "^7.3|^8.0",
         "adhocore/jwt": "^1.1",
         "fideloper/proxy": "^4.4",
+        "firebase/php-jwt": "^5.2",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.12",
-        "laravel/passport": "^10.1",
         "laravel/tinker": "^2.5",
         "lcobucci/jwt": "^4.1"
     },

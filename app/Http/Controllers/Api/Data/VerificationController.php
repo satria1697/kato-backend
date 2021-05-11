@@ -36,9 +36,6 @@ class VerificationController extends BaseController
 
     public function updateStatus(Request $request, $id) {
         $decode = $this->checkJwt($request['jwt']);
-        if ($decode->level > 2) {
-            $this->sendError('not-authenticated');
-        }
         $data = Verification::where('id', $id)->first();
         if (!$data) {
             return $this->sendError('not-found');

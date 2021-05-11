@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use Firebase\JWT\JWT;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;

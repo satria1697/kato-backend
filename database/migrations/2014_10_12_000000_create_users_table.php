@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('verification_code')->nullable();
             $table->integer('level_id');
-            $table->rememberToken();
+            $table->string('token');
             $table->timestamps();
         });
     }

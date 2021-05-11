@@ -32,10 +32,6 @@ class ArticleController extends BaseController
     }
 
     public function store(Request $request) {
-        $decode = $this->checkJwt($request['jwt']);
-        if ($decode->level > 2) {
-            return $this->sendError('not-authorized');
-        }
         $base64 = $request['image'];
         $path = $this->base64ToImg('article', $base64);
         $article = new Article();
@@ -52,11 +48,6 @@ class ArticleController extends BaseController
     }
 
     public function update(Request $request, $slug) {
-        $decode = $this->checkJwt($request['jwt']);
-        if ($decode['level'] > 2) {
-            return $this->sendError('not-authorized');
-        }
-        $now = Carbon::now()->unix();
         $article = Article::where('slug', $slug)->first();
         if (!$article) {
             return $this->sendError('not-found');

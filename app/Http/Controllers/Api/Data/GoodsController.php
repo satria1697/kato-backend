@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\Storage;
 class GoodsController extends BaseController
 {
     public function store(Request $request) {
-        $decode = $this->checkJwt($request['jwt']);
-        if ($decode->level > 2) {
-            return $this->sendError('not-authorized');
-        }
         $base64 = $request['image'];
         if ($base64) {
             $image = base64_decode(str_replace('data:image/jpg;base64,', '', $base64));
@@ -52,11 +48,7 @@ class GoodsController extends BaseController
         return $this->sendResponse($goods, 'success');
     }
 
-    public function delete(Request $request, $id) {
-        $decode = $this->checkJwt($request['jwt']);
-        if ($decode['level'] > 2) {
-            return $this->sendError('not-authorized');
-        }
+    public function delete($id) {
         $goods = Goods::find($id);
         if ($goods) {
             if ($goods->delete()) {
@@ -82,10 +74,6 @@ class GoodsController extends BaseController
     }
 
     public function update(Request $request, $id) {
-        $decode = $this->checkJwt($request['jwt']);
-        if ($decode->level > 2) {
-            return $this->sendError('not-authorized');
-        }
         $goods = Goods::find($id);
         if (!$goods) {
             return $this->sendError('error', ['error' => 'not-found']);

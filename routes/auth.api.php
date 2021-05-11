@@ -10,6 +10,6 @@ Route::post('/verification', [AuthController::class, 'verification']);
 
 Route::post('/level', [LevelController::class, 'index']);
 
-Route::middleware(['auth:api'])->group(function () {
+Route::middleware(['auth-jwt'])->group(function () {
     Route::post('/logout', [\App\Http\Controllers\Api\Auth\AuthController::class, 'logout']);
 });

@@ -24,7 +24,6 @@ class AuthController extends BaseController
         $input['verification_code'] = $code;
         $input['level_id'] = 8;
         $user = User::create($input);
-        $success['token'] =  $user->createToken('Kratom')->accessToken;
         $success['name'] =  $user['name'];
         $success['level'] =  $user['level_id'];
         $payload = array(
@@ -58,7 +57,6 @@ class AuthController extends BaseController
             if ($user['level_id'] > 8) {
                 return $this->sendError('user-blocked');
             }
-            $success['token'] = $user->createToken('Kratom')->accessToken;
             $payload = array(
                 "user" => $user['name'],
                 "level" => $user['level_id'],
@@ -74,18 +72,9 @@ class AuthController extends BaseController
         }
     }
 
-    public function logout() {
-        if(Auth::check()) {
-            $user = Auth::user()->token()->revoke();
-            if ($user) {
-                return $this->sendResponse('Success', 'user-logout');
-            } else {
-                return $this->sendError('error-logout', ['error' => 'error-logout']);
-            }
-        }
-        else {
-            return $this->sendError('error-logout', ['error' => 'error-logout']);
-        }
+    public function logout(Request $request) {
+        $header = $request->header('Authorization');
+        return $this->sendResponse($header, 'success');
     }
 
     public function verification(Request $request) {

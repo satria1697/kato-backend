@@ -13,12 +13,9 @@ use Illuminate\Support\Facades\Storage;
 class CartController extends BaseController
 {
     public function store(Request $request) {
-        $jwt = $this->checkJwt($request->input('jwt'));
-        if ($jwt->level > 8) {
-            return $this->sendError("Unauthorized");
-        }
+        $decode = $this->checkJwt($request['jwt']);
         $cart = new Cart();
-        $cart['user_id'] = $jwt->id;
+        $cart['user_id'] = $decode->id;
         $cart['goods_id'] = $request['id'];
         $cart['buying'] = $request['buying'];
         $cart['status'] = $request['status'];
@@ -56,8 +53,9 @@ class CartController extends BaseController
 
     public function checkout(Request $request) {
         $decode = $this->checkJwt($request['jwt']);
-        $name = 'Lukito';
-        $to_email = 'Lkusdewanto@gmail.com';
+        $user = User::where('id', $decode->id)->get();
+        $name = $user['name'];
+        $to_email = $user['email'];
         $cart = Cart::with('goods')
             ->where('user_id', $decode->id)
             ->get();
