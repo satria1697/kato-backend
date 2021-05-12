@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class VerificationController extends BaseController
 {
     public function update(Request $request, $id) {
-        $decode = $this->checkJwt($request['jwt']);
+        $decode = $this->getHeader($request);
         $data = Verification::where('id', $id)->first();
         if (!$data) {
             return $this->sendError('not-found');

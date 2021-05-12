@@ -66,10 +66,6 @@ class ArticleController extends BaseController
     }
 
     public function remove(Request $request, $id) {
-        $decode = $this->checkJwt($request['jwt']);
-        if ($decode['level'] > 2) {
-            return $this->sendError('not-authorized');
-        }
         $article = Article::find($id);
         if (!$article) {
             $this->sendError('not-found');

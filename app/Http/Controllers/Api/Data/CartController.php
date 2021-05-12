@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 class CartController extends BaseController
 {
     public function store(Request $request) {
-        $decode = $this->checkJwt($request['jwt']);
+        $decode = $this->getHeader($request);
         $cart = new Cart();
         $cart['user_id'] = $decode->id;
         $cart['goods_id'] = $request['id'];
@@ -27,8 +27,8 @@ class CartController extends BaseController
     }
 
     public function show(Request $request) {
-        $jwt = $this->checkJwt($request->input('jwt'));
-        $id = $jwt->id;
+        $decode = $this->getHeader($request);
+        $id = $decode->id;
         $cart = User::with('cart', 'cart.goods')->where('id', $id)->first();
         foreach ($cart['cart'] as $car) {
             $goods = $car['goods'];
@@ -52,7 +52,7 @@ class CartController extends BaseController
     }
 
     public function checkout(Request $request) {
-        $decode = $this->checkJwt($request['jwt']);
+        $decode = $this->getHeader($request);
         $user = User::where('id', $decode->id)->get();
         $name = $user['name'];
         $to_email = $user['email'];

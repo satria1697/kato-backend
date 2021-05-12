@@ -6,12 +6,21 @@ use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class BaseController extends Controller
 {
+    public $key = 'bvMp8EzdcXZjUn0f5K3vOCblCL6xoRk4';
+
+    public function getHeader(Request $request) {
+        $header = $request->header('Authorization');
+        $decode = $this->checkJwt($header);
+        return $decode;
+    }
+
     public function checkJwt($jwt) {
-        $key = 'bvMp8EzdcXZjUn0f5K3vOCblCL6xoRk4';
+        $key = $this->key;
         return JWT::decode($jwt, $key, array('HS256'));
     }
 

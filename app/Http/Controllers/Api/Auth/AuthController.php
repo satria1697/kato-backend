@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Mail;
 
 class AuthController extends BaseController
 {
-    public $key = 'bvMp8EzdcXZjUn0f5K3vOCblCL6xoRk4';
-
     public function register(Request $request) {
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
@@ -50,6 +48,7 @@ class AuthController extends BaseController
     public function login(Request $request) {
         if(Auth::attempt(['email' => $request['email'], 'password' => $request['password']])){
             $user = Auth::user();
+            $user_data = User::where('id', $user->id);
             $verify = $user['email_verified_at'];
             if (!$verify) {
                 return $this->sendError('email-not-verified', $verify);
@@ -64,6 +63,7 @@ class AuthController extends BaseController
                 "email" => $user['email']
             );
             $jwt = JWT::encode($payload, $this->key);
+            $user['token'] = $jwt;
             $success['jwt'] = $jwt;
             return $this->sendResponse($success, 'user-login');
         }
@@ -73,8 +73,13 @@ class AuthController extends BaseController
     }
 
     public function logout(Request $request) {
-        $header = $request->header('Authorization');
-        return $this->sendResponse($header, 'success');
+        $decode = $this->getHeader($request);
+        $user = User::where('id', $decode->id)->first();
+        $user['token'] = '';
+        if (!$user->save()) {
+            return $this->sendError('logout-fail');
+        }
+        return $this->sendResponse(true, 'success');
     }
 
     public function verification(Request $request) {
@@ -87,6 +92,6 @@ class AuthController extends BaseController
         if (!$user->save()) {
             return $this->sendError('fail-update');
         }
-        return $this->sendResponse('success', 'code-true');
+        return $this->sendResponse(true, 'code-true');
     }
 }
