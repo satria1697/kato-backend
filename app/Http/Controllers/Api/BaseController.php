@@ -15,6 +15,7 @@ class BaseController extends Controller
 
     public function getHeader(Request $request) {
         $header = $request->header('Authorization');
+        $header = explode(' ', $header)[1];
         $decode = $this->checkJwt($header);
         return $decode;
     }
