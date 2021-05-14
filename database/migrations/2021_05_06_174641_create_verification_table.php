@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateVerificationTable extends Migration
@@ -23,6 +24,10 @@ class CreateVerificationTable extends Migration
             $table->integer("company_card_status")->default(3);
             $table->timestamps();
         });
+
+        DB::table('verification')->insert([
+            'user_id' => 1
+        ]);
     }
 
     /**
