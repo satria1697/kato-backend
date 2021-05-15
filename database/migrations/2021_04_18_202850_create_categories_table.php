@@ -17,13 +17,14 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('show');
             $table->timestamps();
         });
 
         DB::table('categories')->insert(array(
-            ['name' => 'Table'],
-            ['name' => 'Chair'],
-            ['name' => 'Dumdum'],
+            ['name' => 'Table', 'show' => 1],
+            ['name' => 'Chair', 'show' => 1],
+            ['name' => 'Dumdum', 'show' => 1],
         ));
     }
 

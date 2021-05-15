@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Data;
 
 use App\Http\Controllers\Api\BaseController;
 use App\Models\Data\Goods;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -35,10 +36,18 @@ class GoodsController extends BaseController
 
     public function index(Request $request) {
         $category_id = $request['category'];
+        $filter = $request['filter'];
+        $goods = Goods::query();
         if ($category_id) {
-            $goods = Goods::with('category')->where('category_id', $category_id)->get();
+            $goods = $goods->where('category_id', $category_id);
+        }
+        if ($filter) {
+            $goods = $goods->with(['category' => fn($q) => $q->where('show', 1)]);
+            $goods = $goods->get();
+            $goods = $goods->filter(fn($item) => $item['category'] !== null)->values();
         } else {
-            $goods = Goods::with('category')->get();
+            $goods = $goods->with(['category']);
+            $goods = $goods->get();
         }
         foreach ($goods as $good) {
             if ($good['image']) {

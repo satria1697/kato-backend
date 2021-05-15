@@ -8,8 +8,13 @@ use Illuminate\Http\Request;
 
 class CategoriesController extends BaseController
 {
-    public function index() {
-        $categories = Categories::all();
+    public function index(Request $request) {
+        $filter = $request['filter'];
+        $categories = Categories::query();
+        if ($filter) {
+            $categories = $categories->where('show', 1);
+        }
+        $categories = $categories->get();
         return $this->sendResponse($categories, 'success-get');
     }
 
@@ -47,10 +52,11 @@ class CategoriesController extends BaseController
             return $this->sendError('not-found');
         }
 
-        if (!$data->delete()) {
+        $data['show'] = !$data['show'];
+        if (!$data->save()) {
             return $this->sendError('cant-delete');
         }
 
-        return $this->sendResponse(true, 'success-get');
+        return $this->sendResponse(true, 'success-delete');
     }
 }
