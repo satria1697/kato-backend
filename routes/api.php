@@ -21,6 +21,12 @@ Route::prefix('/goods')->group(function() {
     });
 
     Route::prefix('/category')->group(function() {
+        Route::middleware(['auth-jwt', 'checkadmin'])->group(function () {
+            Route::get('{id}', [CategoriesController::class, 'show']);
+            Route::post('{id}', [CategoriesController::class, 'update']);
+            Route::post('', [CategoriesController::class, 'store']);
+            Route::delete('{id}', [CategoriesController::class, 'destroy']);
+        });
         Route::get('', [CategoriesController::class, 'index']);
     });
 
