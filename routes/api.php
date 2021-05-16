@@ -10,12 +10,10 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/goods')->group(function() {
 
     Route::prefix('/cart')->group(function () {
-        Route::middleware(['auth-jwt', 'checkadmin'])->group(function() {
+        Route::middleware(['auth-jwt', 'checkuser'])->group(function() {
             Route::post('/checkout', [\App\Http\Controllers\Api\Data\CartController::class, 'checkout']);
             Route::post('/find', [\App\Http\Controllers\Api\Data\CartController::class, 'show']);
             Route::delete('/{id}', [\App\Http\Controllers\Api\Data\CartController::class, 'remove']);
-        });
-        Route::middleware(['auth-jwt', 'checkuser'])->group(function() {
             Route::post('', [\App\Http\Controllers\Api\Data\CartController::class, 'store']);
         });
     });

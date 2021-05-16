@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 

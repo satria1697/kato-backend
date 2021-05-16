@@ -25,9 +25,17 @@ class CreateVerificationTable extends Migration
             $table->timestamps();
         });
 
-        DB::table('verification')->insert([
-            'user_id' => 1
-        ]);
+        DB::table('verification')->insert(array(
+            [
+                'user_id' => 1
+            ],
+            [
+                'user_id' => 2
+            ],
+            [
+                'user_id' => 3
+            ]
+        ));
     }
 
     /**

@@ -29,7 +29,7 @@ class CartController extends BaseController
     public function show(Request $request) {
         $decode = $this->getHeader($request);
         $id = $decode->id;
-        $cart = User::with('cart', 'cart.goods')->where('id', $id)->first();
+        $cart = User::with('cart', 'cart.goods', 'cart.status')->where('id', $id)->first();
         foreach ($cart['cart'] as $car) {
             $goods = $car['goods'];
             if ($goods['image']) {

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateCart extends Migration
@@ -21,6 +22,39 @@ class CreateCart extends Migration
             $table->integer("status");
             $table->timestamps();
         });
+
+        DB::table('cart')->insert(array(
+            [
+                'user_id' => 2,
+                'goods_id' => rand(1, 10),
+                'buying' => rand(1,30),
+                'status' => 4
+            ],
+            [
+                'user_id' => 2,
+                'goods_id' => rand(1, 10),
+                'buying' => rand(1,30),
+                'status' => 4
+            ],
+            [
+                'user_id' => 2,
+                'goods_id' => rand(1, 10),
+                'buying' => rand(1,30),
+                'status' => 4
+            ],
+            [
+                'user_id' => 3,
+                'goods_id' => rand(1, 10),
+                'buying' => rand(1,30),
+                'status' => 4
+            ],
+            [
+                'user_id' => 3,
+                'goods_id' => rand(1, 10),
+                'buying' => rand(1,30),
+                'status' => 4
+            ]
+        ));
     }
 
     /**

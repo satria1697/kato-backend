@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Data\Cart;
+use App\Models\Data\CartStatus;
 use App\Models\Data\Verification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

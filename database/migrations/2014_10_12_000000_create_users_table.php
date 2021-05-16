@@ -35,6 +35,24 @@ class CreateUsersTable extends Migration
                 'level_id' => 2,
                 'created_at' => now(),
                 'updated_at' => now()
+            ],
+            [
+                'name' => 'user 1',
+                'email' => 'userkratom1@kratom.com',
+                'email_verified_at' => now(),
+                'password' => bcrypt('user12'),
+                'level_id' => 8,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'name' => 'user 2',
+                'email' => 'userkratom2@kratom.com',
+                'email_verified_at' => now(),
+                'password' => bcrypt('user12'),
+                'level_id' => 8,
+                'created_at' => now(),
+                'updated_at' => now()
             ]
         ));
     }
