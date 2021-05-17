@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Data;
 use App\Http\Controllers\Api\BaseController;
 use App\Models\Data\Categories;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CategoriesController extends BaseController
 {
@@ -21,6 +22,10 @@ class CategoriesController extends BaseController
     public function store(Request $request) {
         $input = $request->all();
         $data = new Categories();
+        $rules = [
+            'name' => 'required|string'
+        ];
+        $this->validateData($input, $rules);
         $data['name'] = $input['name'];
         $data['show'] = 1;
         if (!$data->save()) {

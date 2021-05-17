@@ -20,9 +20,9 @@ class CartController extends BaseController
         $cart['buying'] = $request['buying'];
         $cart['status'] = $request['status'];
         if ($cart->save()) {
-            return $this->sendResponse('cart-saved', $cart);
+            return $this->sendResponse(true, 'success');
         } else {
-            return $this->sendError("cart-fail");
+            return $this->sendError(false);
         }
     }
 
