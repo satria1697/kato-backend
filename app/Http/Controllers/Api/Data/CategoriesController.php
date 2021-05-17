@@ -22,6 +22,7 @@ class CategoriesController extends BaseController
         $input = $request->all();
         $data = new Categories();
         $data['name'] = $input['name'];
+        $data['show'] = 1;
         if (!$data->save()) {
             return $this->sendError('cant-save');
         }

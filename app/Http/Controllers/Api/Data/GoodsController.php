@@ -41,7 +41,7 @@ class GoodsController extends BaseController
         if ($category_id) {
             $goods = $goods->where('category_id', $category_id);
         }
-        if ($filter) {
+        if ($filter) { //true
             $goods = $goods->with(['category' => fn($q) => $q->where('show', 1)]);
             $goods = $goods->get();
             $goods = $goods->filter(fn($item) => $item['category'] !== null)->values();
@@ -51,7 +51,7 @@ class GoodsController extends BaseController
         }
         foreach ($goods as $good) {
             if ($good['image']) {
-                $good['image'] = 'data:image/jpg;base64,' . base64_encode(Storage::get($goods['image']));
+                $good['image'] = 'data:image/png;base64,' . base64_encode(Storage::get($goods['image']));
             }
         }
         return $this->sendResponse($goods, 'success');
