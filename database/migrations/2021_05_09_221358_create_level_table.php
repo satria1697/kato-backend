@@ -23,6 +23,7 @@ class CreateLevelTable extends Migration
             ['id' => 1 ,'description' => 'super-admin'],
             ['id' => 2 ,'description' => 'admin'],
             ['id' => 8 ,'description' => 'user'],
+            ['id' => 9 ,'description' => 'blocked'],
         ));
     }
 

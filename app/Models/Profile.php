@@ -9,4 +9,10 @@ class Profile extends Model
 {
     use HasFactory;
     protected $table = 'profile';
+    protected $visible = [
+        'name',
+        'position',
+        'company',
+        'user_id',
+    ];
 }
