@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       MariaDB:
-        image: MariaDB 10.4.19
+        image: mariadb
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: krato
