@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
-class AuthJWT
+class AuthJWT extends BaseMiddleware
 {
     /**
      * Handle an incoming request.
@@ -19,7 +19,7 @@ class AuthJWT
     {
         $header = $request->header('Authorization');
         if (!$header) {
-            return Response::json('not-authorize', 403);
+            return $this->sendError('not-authorize');
         }
         return $next($request);
     }

@@ -9,4 +9,5 @@ class Article extends Model
 {
     use HasFactory;
     protected $table="article";
+    protected $hidden=['updated_at'];
 }

@@ -19,7 +19,7 @@ class CheckAdmin extends BaseMiddleware
     {
         $decode = $this->checkJwt($request->header('Authorization'));
         if ($decode->level > 2) {
-            return Response::json('not-authorized', 403);
+            return $this->sendError('not-authorize');
         }
         return $next($request);
     }

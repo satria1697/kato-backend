@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends BaseController
 {
+    private $rules = [
+        'title' => 'required|string|min:5',
+        'brief' => 'required|string|min:5',
+        'text' => 'required|string|min:5',
+        'show' => 'required|boolean',
+        'image' => 'starts_with:data:image/|nullable'
+    ];
+
     public function index() {
         $data = Article::all();
         foreach ($data as $da) {
@@ -32,6 +40,12 @@ class ArticleController extends BaseController
     }
 
     public function store(Request $request) {
+        $validate = $this->validateData($request->all(), $this->rules);
+
+        if ($validate->fails()) {
+            return $this->sendError('validate-fail', $validate->errors(), 200);
+        }
+
         $base64 = $request['image'];
         $path = $this->base64ToImg('article', $base64);
         $article = new Article();
@@ -48,6 +62,12 @@ class ArticleController extends BaseController
     }
 
     public function update(Request $request, $slug) {
+        $validate = $this->validateData($request->all(), $this->rules);
+
+        if ($validate->fails()) {
+            return $this->sendError('validate-fail', $validate->errors(), 200);
+        }
+
         $article = Article::where('slug', $slug)->first();
         if (!$article) {
             return $this->sendError('not-found');
