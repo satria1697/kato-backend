@@ -74,4 +74,9 @@ class CartController extends BaseController
         Mail::to($to_email)->send(new CheckoutEmail($cart, $name));
         return $this->sendResponse($to_email, 'success');
     }
+
+    public function index() {
+        $data = Cart::with('goods')->get();
+        return $this->sendResponse($data, 'success-get');
+    }
 }

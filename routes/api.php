@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\ProfileController;
+use App\Http\Controllers\Api\Data\CartController;
 use App\Http\Controllers\Api\Data\CategoriesController;
 use App\Http\Controllers\Api\Data\VerificationController;
 use App\Http\Controllers\Api\Data\VerificationStatusController;
@@ -15,6 +16,10 @@ Route::prefix('/goods')->group(function() {
             Route::post('/find', [\App\Http\Controllers\Api\Data\CartController::class, 'show']);
             Route::delete('/{id}', [\App\Http\Controllers\Api\Data\CartController::class, 'remove']);
             Route::post('', [\App\Http\Controllers\Api\Data\CartController::class, 'store']);
+        });
+
+        Route::middleware(['auth-jwt', 'checkadmin'])->group(function() {
+            Route::get('/', [CartController::class, 'index']);
         });
     });
 
