@@ -10,7 +10,24 @@ use Illuminate\Support\Facades\Storage;
 
 class GoodsController extends BaseController
 {
+    public $rules = [
+        'image' => 'starts_with:data:image/|nullable',
+        'name' => 'required|string',
+        'description' => 'required|string',
+        'price' => 'required|number',
+        'stock' => 'required|number',
+        'brief' => 'required|string',
+        'categoryId' => 'required|number',
+    ];
+
     public function store(Request $request) {
+        $input = $request->all();
+        $validate = $this->validateData($input, $this->rules);
+
+        if ($validate->fails()) {
+            return $this->sendError('validate-fail', $validate->errors(), 200);
+        }
+
         $base64 = $request['image'];
         if ($base64) {
             $image = base64_decode(str_replace('data:image/jpg;base64,', '', $base64));
@@ -27,11 +44,10 @@ class GoodsController extends BaseController
         $goods['image'] = $path;
         $goods['brief'] = $request['brief'];
         $goods['category_id'] = $request['categoryId'];
-        if ($goods->save()) {
-            return $this->sendResponse($goods, 'success');
-        } else {
+        if (!$goods->save()) {
             return $this->sendError('error', ['error' => 'error-save']);
         }
+        return $this->sendResponse($goods, 'success');
     }
 
     public function index(Request $request) {
@@ -83,6 +99,13 @@ class GoodsController extends BaseController
     }
 
     public function update(Request $request, $id) {
+        $input = $request->all();
+        $validate = $this->validateData($input, $this->rules);
+
+        if ($validate->fails()) {
+            return $this->sendError('validate-fail', $validate->errors(), 200);
+        }
+
         $goods = Goods::find($id);
         if (!$goods) {
             return $this->sendError('error', ['error' => 'not-found']);
