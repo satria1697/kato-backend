@@ -19,7 +19,7 @@ class CheckUserActive extends BaseMiddleware
     {
         $decode = $this->checkJwt($request->header('Authorization'));
         if ($decode->level > 8) {
-            return Response::json('not-authorized', 403);
+            return $this->sendError('not-authorize');
         }
         return $next($request);
     }

@@ -66,13 +66,8 @@ class BaseController extends Controller
         return Carbon::now()->unix();
     }
 
-    public function validateData($input, $data) {
-        $validate = Validator::make($input, [
-            'name' => 'required|string'
-        ]);
-        if ($validate->fails()) {
-            return $this->sendError('validate-error', $validate, 200);
-        }
-        return true;
+    public function validateData($input, $rules) {
+        $validate = Validator::make($input, $rules);
+        return $validate;
     }
 }

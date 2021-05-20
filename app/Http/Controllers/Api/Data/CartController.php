@@ -12,18 +12,30 @@ use Illuminate\Support\Facades\Storage;
 
 class CartController extends BaseController
 {
+    private $rules = [
+        'id' => 'required|number',
+        'buying' => 'required|number|min:1',
+        'status' => 'required|number'
+    ];
+
     public function store(Request $request) {
+        $input = $request->all();
+        $validate = $this->validateData($input, $this->rules);
+
+        if ($validate->fails()) {
+            return $this->sendError('validate-fail', $validate->errors(), 200);
+        }
+
         $decode = $this->getHeader($request);
         $cart = new Cart();
         $cart['user_id'] = $decode->id;
         $cart['goods_id'] = $request['id'];
         $cart['buying'] = $request['buying'];
         $cart['status'] = $request['status'];
-        if ($cart->save()) {
-            return $this->sendResponse(true, 'success');
-        } else {
+        if (!$cart->save()) {
             return $this->sendError(false);
         }
+        return $this->sendResponse(true, 'success');
     }
 
     public function show(Request $request) {

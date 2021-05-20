@@ -12,4 +12,15 @@ class BaseMiddleware
         $jwt = explode(' ', $jwt)[1];
         return JWT::decode($jwt, $key, array('HS256'));
     }
+
+    public function sendError($error, $errorMessages = [], $code = 403) {
+        $response = [
+            'success' => false,
+            'message' => $error,
+        ];
+        if(!empty($errorMessages)){
+            $response['data'] = $errorMessages;
+        }
+        return Response::json($response, $code);
+    }
 }

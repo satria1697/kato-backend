@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Validator;
 
 class CategoriesController extends BaseController
 {
+    private $rules = [
+        'name' => 'required|string'
+    ];
+
     public function index(Request $request) {
         $filter = $request['filter'];
         $categories = Categories::query();
@@ -21,11 +25,13 @@ class CategoriesController extends BaseController
 
     public function store(Request $request) {
         $input = $request->all();
+        $validate = $this->validateData($input, $this->rules);
+
+        if ($validate->fails()) {
+            return $this->sendError('validate-fail', $validate->errors(), 200);
+        }
+
         $data = new Categories();
-        $rules = [
-            'name' => 'required|string'
-        ];
-        $this->validateData($input, $rules);
         $data['name'] = $input['name'];
         $data['show'] = 1;
         if (!$data->save()) {
@@ -44,6 +50,13 @@ class CategoriesController extends BaseController
 
     public function update(Request $request, $id) {
         $input = $request->all();
+
+        $validate = $this->validateData($input, $this->rules);
+
+        if ($validate->fails()) {
+            return $this->sendError('validate-fail', $validate->errors(), 200);
+        }
+
         $data = Categories::where('id', $id)->first();
         $data['name'] = $input['name'];
         if (!$data->save()) {
