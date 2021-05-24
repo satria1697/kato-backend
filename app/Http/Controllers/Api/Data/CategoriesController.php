@@ -14,9 +14,14 @@ class CategoriesController extends BaseController
     ];
 
     public function index(Request $request) {
-        $filter = $request['filter'];
+        $input = $request->all();
         $categories = Categories::query();
-        if ($filter) {
+        $search = in_array('search', $input);
+        $filter = in_array('filter', $input);
+        if ($search) {
+            $categories->where('title', 'like', '%'.$input['search'].'%');
+        }
+        if ($filter && $input['filter']) {
             $categories = $categories->where('show', 1);
         }
         $categories = $categories->get();

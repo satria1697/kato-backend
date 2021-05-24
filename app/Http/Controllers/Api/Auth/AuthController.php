@@ -60,7 +60,7 @@ class AuthController extends BaseController
                 "user" => $user['name'],
                 "level" => $user['level_id'],
                 "id" => $user['id'],
-                "email" => $user['email']
+                "email" => $user['email'],
             );
             $jwt = JWT::encode($payload, $this->key);
             $user['token'] = $jwt;

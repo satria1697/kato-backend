@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Data;
 use App\Http\Controllers\Api\BaseController;
 use App\Models\Data\Article;
 use Carbon\Carbon;
+use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -18,8 +19,14 @@ class ArticleController extends BaseController
         'image' => 'starts_with:data:image/|nullable'
     ];
 
-    public function index() {
-        $data = Article::all();
+    public function index(Request $request) {
+        $input = $request->all();
+        $article = Article::query();
+        $search = in_array('search', $input);
+        if ($search) {
+            $article->where('title', 'like', '%'.$input['search'].'%');
+        }
+        $data = $article->get();
         foreach ($data as $da) {
             if ($da['image']) {
                 $da['image'] = $this->imgToBase64($da['image']);
