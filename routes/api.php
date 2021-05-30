@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Data\CartController;
 use App\Http\Controllers\Api\Data\CategoriesController;
 use App\Http\Controllers\Api\Data\VerificationController;
 use App\Http\Controllers\Api\Data\VerificationStatusController;
+use App\Http\Controllers\Api\Data\CartStatusController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -68,5 +69,13 @@ Route::prefix('/id.verification')->group(function() {
     Route::middleware(['auth-jwt', 'checkadmin'])->group(function () {
         Route::post('/updateStatus/{id}', [VerificationController::class, 'updateStatus']);
         Route::post('{id}', [VerificationController::class, 'update']);
+    });
+});
+
+Route::prefix('cart')->group(function () {
+    Route::middleware(['auth-jwt', 'checkadmin'])->group(function() {
+        Route::post('/update', [CartStatusController::class, 'updateCart']);
+        Route::post('/', [CartController::class, 'getOne']);
+        Route::get('/status', [CartStatusController::class, 'index']);
     });
 });

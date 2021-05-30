@@ -20,11 +20,18 @@ class ArticleController extends BaseController
     ];
 
     public function index(Request $request) {
-        $input = $request->all();
+        $search = $request->search;
+        $split = explode(':',$search);
+        $searchby = 'title';
+
+        if (count($split) > 1) {
+            $searchby = $split[0];
+            $search = $split[1];
+        }
+
         $article = Article::query();
-        $search = in_array('search', $input);
         if ($search) {
-            $article->where('title', 'like', '%'.$input['search'].'%');
+            $article->where($searchby, 'like', '%'.$search.'%');
         }
         $data = $article->get();
         foreach ($data as $da) {

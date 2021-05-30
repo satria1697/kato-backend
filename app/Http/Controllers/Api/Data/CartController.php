@@ -75,8 +75,32 @@ class CartController extends BaseController
         return $this->sendResponse($to_email, 'success');
     }
 
-    public function index() {
-        $data = Cart::with('goods')->get();
+    public function index(Request $request) {
+        $search = $request->search;
+
+        $split = explode(':',$search);
+        $searchby = 'name';
+
+        if (count($split) > 1) {
+            $searchby = $split[0];
+            $search = $split[1];
+        }
+
+        $categories = Cart::query()->with('goods', 'user', 'status');
+        if ($search) {
+            $categories->where($searchby, 'like', '%'.$search.'%');
+        }
+        $data = $categories->get();
         return $this->sendResponse($data, 'success-get');
+    }
+
+    public function getOne(Request $request) {
+        $cart = Cart::with('goods', 'status', 'user')->where('id', $request->id)->first();
+        $goods = $cart['goods'];
+        if ($goods['image']) {
+            $goods['image'] = 'data:image/png;base64,' . base64_encode(Storage::get($goods['image']));
+        }
+        $cart['buying'] += 0;
+        return $this->sendResponse($cart, 'success');
     }
 }

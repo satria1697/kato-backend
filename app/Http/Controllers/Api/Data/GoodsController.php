@@ -51,18 +51,28 @@ class GoodsController extends BaseController
     }
 
     public function index(Request $request) {
-        $input = $request->all();
-        $category_id = in_array('category', $input);
-        $filter = in_array('filter', $input);
-        $search = in_array('search', $input);
+
+
+        $search = $request->search;
+        $filter = $request->filter;
+        $category_id = $request->category;
+
+        $split = explode(':',$search);
+        $searchby = 'name';
+
+        if (count($split) > 1) {
+            $searchby = $split[0];
+            $search = $split[1];
+        }
+
         $goods = Goods::query();
         if ($search) {
-            $goods->where('title', 'like', '%'.$input['search'].'%');
+            $goods->where($searchby, 'like', '%'.$search.'%');
         }
         if ($category_id) {
-            $goods = $goods->where('category_id', $input['category']);
+            $goods = $goods->where('category_id', $category_id);
         }
-        if ($filter && $input['filter']) { //true
+        if ($filter) {
             $goods = $goods->with(['category' => fn($q) => $q->where('show', 1)]);
             $goods = $goods->get();
             $goods = $goods->filter(fn($item) => $item['category'] !== null)->values();
