@@ -16,11 +16,21 @@ use Illuminate\Support\Facades\Mail;
 class AuthController extends BaseController
 {
     public function register(Request $request) {
+        $rules = [
+            'email' => 'required|user,email|email',
+            'password' => 'required|string',
+        ];
         $input = $request->all();
+        $validate = $this->validateData($input, $rules);
+        if ($validate->fails()) {
+            return $this->sendError('validate-fail', $validate->errors(), 422);
+        }
+
         $input['password'] = bcrypt($input['password']);
         $code = rand(111111111, 999999999);
         $input['verification_code'] = $code;
         $input['level_id'] = 8;
+
         $user = User::create($input);
         $success['name'] =  $user['name'];
         $success['level'] =  $user['level_id'];
@@ -48,7 +58,6 @@ class AuthController extends BaseController
     public function login(Request $request) {
         if(Auth::attempt(['email' => $request['email'], 'password' => $request['password']])){
             $user = Auth::user();
-            $user_data = User::where('id', $user->id);
             $verify = $user['email_verified_at'];
             if (!$verify) {
                 return $this->sendError('email-not-verified', $verify);
@@ -66,8 +75,7 @@ class AuthController extends BaseController
             $user['token'] = $jwt;
             $success['jwt'] = $jwt;
             return $this->sendResponse($success, 'user-login');
-        }
-        else{
+        } else {
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
         }
     }
@@ -79,7 +87,7 @@ class AuthController extends BaseController
         if (!$user->save()) {
             return $this->sendError('logout-fail');
         }
-        return $this->sendResponse(true, 'success');
+        return $this->sendResponse('', 'success');
     }
 
     public function verification(Request $request) {
@@ -92,6 +100,6 @@ class AuthController extends BaseController
         if (!$user->save()) {
             return $this->sendError('fail-update');
         }
-        return $this->sendResponse(true, 'code-true');
+        return $this->sendResponse('code-true', 'success-verif');
     }
 }

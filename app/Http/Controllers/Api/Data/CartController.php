@@ -12,18 +12,17 @@ use Illuminate\Support\Facades\Storage;
 
 class CartController extends BaseController
 {
-    private $rules = [
-        'id' => 'required|number',
-        'buying' => 'required|number|min:1',
-        'status' => 'required|number'
-    ];
-
     public function store(Request $request) {
-        $input = $request->all();
-        $validate = $this->validateData($input, $this->rules);
+        $rules = [
+            'id' => 'required|number',
+            'buying' => 'required|number|min:1',
+            'status' => 'required|number'
+        ];
 
+        $input = $request->all();
+        $validate = $this->validateData($input, $rules);
         if ($validate->fails()) {
-            return $this->sendError('validate-fail', $validate->errors(), 200);
+            return $this->sendError('validate-fail', $validate->errors(), 422);
         }
 
         $decode = $this->getHeader($request);

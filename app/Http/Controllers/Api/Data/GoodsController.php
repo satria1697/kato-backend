@@ -10,40 +10,39 @@ use Illuminate\Support\Facades\Storage;
 
 class GoodsController extends BaseController
 {
-    public $rules = [
-        'image' => 'starts_with:data:image/|nullable',
-        'name' => 'required|string',
-        'description' => 'required|string',
-        'price' => 'required|number',
-        'stock' => 'required|number',
-        'brief' => 'required|string',
-        'categoryId' => 'required|number',
-    ];
-
     public function store(Request $request) {
-        $input = $request->all();
-        $validate = $this->validateData($input, $this->rules);
+        $rules = [
+            'image' => 'starts_with:data:image/|nullable',
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'price' => 'required|number',
+            'stock' => 'required|number',
+            'brief' => 'required|string',
+            'categoryId' => 'required|number',
+        ];
 
+        $input = $request->all();
+        $validate = $this->validateData($input, $rules);
         if ($validate->fails()) {
-            return $this->sendError('validate-fail', $validate->errors(), 200);
+            return $this->sendError('validate-fail', $validate->errors(), 422);
         }
 
-        $base64 = $request['image'];
+        $base64 = $input['image'];
         if ($base64) {
             $image = base64_decode(str_replace('data:image/jpg;base64,', '', $base64));
-            $path = 'images/'.$request['name'].'.jpg';
+            $path = 'images/'.$input['name'].'.jpg';
             Storage::put($path, $image);
         } else {
             $path = null;
         }
         $goods = new Goods();
-        $goods['name'] = $request['name'];
-        $goods['description'] = $request['description'];
-        $goods['price'] = $request['price'];
-        $goods['stock'] = $request['stock'];
+        $goods['name'] = $input['name'];
+        $goods['description'] = $input['description'];
+        $goods['price'] = $input['price'];
+        $goods['stock'] = $input['stock'];
         $goods['image'] = $path;
-        $goods['brief'] = $request['brief'];
-        $goods['category_id'] = $request['categoryId'];
+        $goods['brief'] = $input['brief'];
+        $goods['category_id'] = $input['categoryId'];
         if (!$goods->save()) {
             return $this->sendError('error', ['error' => 'error-save']);
         }
@@ -51,11 +50,11 @@ class GoodsController extends BaseController
     }
 
     public function index(Request $request) {
+        $input = $request->all();
 
-
-        $search = $request->search;
-        $filter = $request->filter;
-        $category_id = $request->category;
+        $search = $input['search'];
+        $filter = $input['filter'];
+        $category_id = $input['category'];
 
         $split = explode(':',$search);
         $searchby = 'name';
@@ -90,15 +89,13 @@ class GoodsController extends BaseController
 
     public function delete($id) {
         $goods = Goods::find($id);
-        if ($goods) {
-            if ($goods->delete()) {
-                return $this->sendResponse([], 'success-delete');
-            } else {
-                return $this->sendError('error', ['error' => 'error-delete']);
-            }
-        } else {
+        if (!$goods) {
             return $this->sendError('error', ['error' => 'not-found']);
         }
+        if (!$goods->delete()) {
+            return $this->sendError('error', ['error' => 'error-delete']);
+        }
+        return $this->sendResponse($id, 'success-delete');
     }
 
     public function view($id) {
@@ -106,19 +103,27 @@ class GoodsController extends BaseController
         if ($goods['image']) {
             $goods['image'] = 'data:image/jpg;base64,' . base64_encode(Storage::get($goods['image']));
         }
-        if ($goods) {
-            return $this->sendResponse($goods, 'success');
-        } else {
+        if (!$goods) {
             return $this->sendError('error', ['error' => 'not-found']);
         }
+        return $this->sendResponse($goods, 'success');
     }
 
     public function update(Request $request, $id) {
-        $input = $request->all();
-        $validate = $this->validateData($input, $this->rules);
+        $rules = [
+            'image' => 'starts_with:data:image/|nullable',
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'price' => 'required|number',
+            'stock' => 'required|number',
+            'brief' => 'required|string',
+            'categoryId' => 'required|number',
+        ];
 
+        $input = $request->all();
+        $validate = $this->validateData($input, $rules);
         if ($validate->fails()) {
-            return $this->sendError('validate-fail', $validate->errors(), 200);
+            return $this->sendError('validate-fail', $validate->errors(), 422);
         }
 
         $goods = Goods::find($id);
@@ -132,8 +137,7 @@ class GoodsController extends BaseController
             Storage::put($path, $image);
         } else if ($goods['image']) {
             $path = $goods['image'];
-        }
-         else {
+        } else {
             $path = null;
         }
         $goods['image'] = $path;
@@ -143,7 +147,9 @@ class GoodsController extends BaseController
         $goods['stock'] = $request['stock'];
         $goods['brief'] = $request['brief'];
         $goods['category_id'] = $request['categoryId'];
-        $goods->save();
+        if (!$goods->save()) {
+            return $this->sendError('error-save');
+        }
         return $this->sendResponse($goods, 'success');
     }
 }

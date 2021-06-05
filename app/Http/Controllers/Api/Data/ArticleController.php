@@ -11,14 +11,6 @@ use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends BaseController
 {
-    private $rules = [
-        'title' => 'required|string|min:5',
-        'brief' => 'required|string|min:5',
-        'text' => 'required|string|min:5',
-        'show' => 'required|boolean',
-        'image' => 'starts_with:data:image/|nullable'
-    ];
-
     public function index(Request $request) {
         $search = $request->search;
         $split = explode(':',$search);
@@ -54,10 +46,18 @@ class ArticleController extends BaseController
     }
 
     public function store(Request $request) {
-        $validate = $this->validateData($request->all(), $this->rules);
+        $rules = [
+            'title' => 'required|string|min:5',
+            'brief' => 'required|string|min:5',
+            'text' => 'required|string|min:5',
+            'show' => 'required|boolean',
+            'image' => 'starts_with:data:image/|nullable'
+        ];
 
+        $input = $request->all();
+        $validate = $this->validateData($input, $rules);
         if ($validate->fails()) {
-            return $this->sendError('validate-fail', $validate->errors(), 200);
+            return $this->sendError('validate-fail', $validate->errors(), 422);
         }
 
         $base64 = $request['image'];
@@ -76,10 +76,21 @@ class ArticleController extends BaseController
     }
 
     public function update(Request $request, $slug) {
-        $validate = $this->validateData($request->all(), $this->rules);
+        $rules = [
+            'title' => 'required|string|min:5',
+            'brief' => 'required|string|min:5',
+            'text' => 'required|string|min:5',
+            'show' => 'required|boolean',
+            'image' => 'starts_with:data:image/|nullable',
+            'slug' => 'required|string|min:1',
+        ];
 
+        $input = $request->all();
+        $input['slug'] = $slug;
+        $input = $request->all();
+        $validate = $this->validateData($input, $rules);
         if ($validate->fails()) {
-            return $this->sendError('validate-fail', $validate->errors(), 200);
+            return $this->sendError('validate-fail', $validate->errors(), 422);
         }
 
         $article = Article::where('slug', $slug)->first();

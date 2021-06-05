@@ -32,7 +32,18 @@ class ProfileController extends BaseController
     }
 
     public function update(Request $request, $id) {
+        $rules = [
+            'name' => 'string|min:5',
+            'company' => 'string|min:5',
+            'position' => 'string|min:1'
+        ];
+
         $input = $request->all();
+        $validate = $this->validateData($input, $rules);
+        if ($validate->fails()) {
+            return $this->sendError('validate-fail', $validate->errors(), 422);
+        }
+
         $data = Profile::where('user_id', $id)->first();
         $data['name'] = $input['name'];
         $data['company'] = $input['company'];

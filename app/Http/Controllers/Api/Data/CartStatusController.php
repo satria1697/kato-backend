@@ -16,8 +16,19 @@ class CartStatusController extends BaseController
     }
 
     public function updateCart(Request $request) {
-        $id = $request->id;
-        $status = $request->status;
+        $rules = [
+            'id' => 'required|numeric',
+            'status' => 'required|string',
+        ];
+
+        $input = $request->all();
+        $validate = $this->validateData($input, $rules);
+        if ($validate->fails()) {
+            return $this->sendError('validate-fail', $validate->errors(), 422);
+        }
+
+        $id = $input['id'];
+        $status = $input['status'];
         $cart = Cart::where('id', $id)->first();
         $cart->update([
             'status' => $status
