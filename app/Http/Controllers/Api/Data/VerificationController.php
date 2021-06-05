@@ -9,7 +9,8 @@ use Illuminate\Http\Request;
 
 class VerificationController extends BaseController
 {
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $decode = $this->getHeader($request);
         $data = Verification::where('id', $id)->first();
         if (!$data) {
@@ -34,7 +35,8 @@ class VerificationController extends BaseController
         return $this->sendResponse(true, 'success');
     }
 
-    public function updateStatus(Request $request, $id) {
+    public function updateStatus(Request $request, $id)
+    {
         $decode = $this->checkJwt($request['jwt']);
         $data = Verification::where('id', $id)->first();
         if (!$data) {

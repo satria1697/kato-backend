@@ -9,7 +9,8 @@ use Illuminate\Http\Request;
 
 class VerificationStatusController extends BaseController
 {
-    public function index() {
+    public function index()
+    {
         $data = VerificationStatus::all();
         return $this->sendResponse($data, 'success');
     }

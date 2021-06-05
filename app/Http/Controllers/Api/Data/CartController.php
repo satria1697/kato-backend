@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Storage;
 
 class CartController extends BaseController
 {
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $rules = [
             'id' => 'required|number',
             'buying' => 'required|number|min:1',
@@ -37,7 +38,8 @@ class CartController extends BaseController
         return $this->sendResponse(true, 'success');
     }
 
-    public function show(Request $request) {
+    public function show(Request $request)
+    {
         $decode = $this->getHeader($request);
         $id = $decode->id;
         $cart = User::with('cart', 'cart.goods', 'cart.status')->where('id', $id)->first();
@@ -51,7 +53,8 @@ class CartController extends BaseController
         return $this->sendResponse($cart, 'success');
     }
 
-    public function remove($id) {
+    public function remove($id)
+    {
         $cart = Cart::find($id);
         if (!$cart) {
             return $this->sendError('not-found');
@@ -62,7 +65,8 @@ class CartController extends BaseController
         return $this->sendResponse($cart, 'delete-success');
     }
 
-    public function checkout(Request $request) {
+    public function checkout(Request $request)
+    {
         $decode = $this->getHeader($request);
         $user = User::where('id', $decode->id)->get();
         $name = $user['name'];
@@ -74,10 +78,11 @@ class CartController extends BaseController
         return $this->sendResponse($to_email, 'success');
     }
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $search = $request->search;
 
-        $split = explode(':',$search);
+        $split = explode(':', $search);
         $searchby = 'name';
 
         if (count($split) > 1) {
@@ -93,7 +98,8 @@ class CartController extends BaseController
         return $this->sendResponse($data, 'success-get');
     }
 
-    public function getOne(Request $request) {
+    public function getOne(Request $request)
+    {
         $cart = Cart::with('goods', 'status', 'user')->where('id', $request->id)->first();
         $goods = $cart['goods'];
         if ($goods['image']) {

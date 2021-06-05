@@ -50,18 +50,22 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function cart() {
+    public function cart()
+    {
         return $this->hasMany(Cart::class);
     }
 
-    public function profile() {
+    public function profile()
+    {
         return $this->hasOne(Profile::class);
     }
-    public function verification() {
+    public function verification()
+    {
         return $this->hasOne(Verification::class);
     }
 
-    public function level() {
+    public function level()
+    {
         return $this->hasOne(Level::class, 'id', 'level_id');
     }
 }

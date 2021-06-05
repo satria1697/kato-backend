@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 
 class LevelController extends BaseController
 {
-    public function index() {
+    public function index()
+    {
         $data = Level::all();
         return $this->sendResponse($data, 'success');
     }

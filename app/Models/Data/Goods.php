@@ -10,7 +10,8 @@ class Goods extends Model
     use HasFactory;
     protected $table="goods";
 
-    public function category() {
+    public function category()
+    {
         return $this->hasOne(Categories::class, 'id', 'category_id');
     }
 }

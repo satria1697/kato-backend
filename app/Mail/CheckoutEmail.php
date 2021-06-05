@@ -34,6 +34,6 @@ class CheckoutEmail extends Mailable
     public function build()
     {
         return $this->from('satriaandhika1697@gmail.com')
-                    ->view('emails.mail');
+            ->view('emails.mail');
     }
 }

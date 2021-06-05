@@ -10,12 +10,14 @@ use Illuminate\Http\Request;
 
 class CartStatusController extends BaseController
 {
-    public function index() {
+    public function index()
+    {
         $data = CartStatus::all();
         return $this->sendResponse($data, 'success-get');
     }
 
-    public function updateCart(Request $request) {
+    public function updateCart(Request $request)
+    {
         $rules = [
             'id' => 'required|numeric',
             'status' => 'required|string',
@@ -30,9 +32,11 @@ class CartStatusController extends BaseController
         $id = $input['id'];
         $status = $input['status'];
         $cart = Cart::where('id', $id)->first();
-        $cart->update([
+        $cart->update(
+            [
             'status' => $status
-        ]);
+            ]
+        );
         $cart->save();
         return $this->sendResponse($cart, 'success-update');
     }

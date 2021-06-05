@@ -14,15 +14,18 @@ class Cart extends Model
         'status'
     ];
 
-    public function goods() {
+    public function goods()
+    {
         return $this->hasOne(Goods::class, 'id', 'goods_id');
     }
 
-    public function status() {
+    public function status()
+    {
         return $this->hasOne(CartStatus::class, 'id', 'status');
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

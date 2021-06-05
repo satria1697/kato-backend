@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Mail;
 
 class AuthController extends BaseController
 {
-    public function register(Request $request) {
+    public function register(Request $request)
+    {
         $rules = [
             'email' => 'required|user,email|email',
             'password' => 'required|string',
@@ -55,8 +56,9 @@ class AuthController extends BaseController
         return $this->sendResponse($success, 'User register successfully.');
     }
 
-    public function login(Request $request) {
-        if(Auth::attempt(['email' => $request['email'], 'password' => $request['password']])){
+    public function login(Request $request)
+    {
+        if(Auth::attempt(['email' => $request['email'], 'password' => $request['password']])) {
             $user = Auth::user();
             $verify = $user['email_verified_at'];
             if (!$verify) {
@@ -80,7 +82,8 @@ class AuthController extends BaseController
         }
     }
 
-    public function logout(Request $request) {
+    public function logout(Request $request)
+    {
         $decode = $this->getHeader($request);
         $user = User::where('id', $decode->id)->first();
         $user['token'] = '';
@@ -90,7 +93,8 @@ class AuthController extends BaseController
         return $this->sendResponse('', 'success');
     }
 
-    public function verification(Request $request) {
+    public function verification(Request $request)
+    {
         $input = $request->all();
         $user = User::where('email', $input['email'])->first();
         if ($input['code'] != $user['verification_code']) {

@@ -9,12 +9,14 @@ use Illuminate\Http\Request;
 
 class ProfileController extends BaseController
 {
-    public function index() {
+    public function index()
+    {
         $data = User::with('profile', 'verification')->get();
         return $this->sendResponse($data, 'success');
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $data = User::with('level', 'profile', 'verification', 'verification.id_status', 'verification.company_status')->where('id', $id)->first();
         if (!$data) {
             return $this->sendError('not-found');
@@ -31,7 +33,8 @@ class ProfileController extends BaseController
         return $this->sendResponse($data, 'success');
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $rules = [
             'name' => 'string|min:5',
             'company' => 'string|min:5',

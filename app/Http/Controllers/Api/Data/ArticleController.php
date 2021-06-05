@@ -11,9 +11,10 @@ use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends BaseController
 {
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $search = $request->search;
-        $split = explode(':',$search);
+        $split = explode(':', $search);
         $searchby = 'title';
 
         if (count($split) > 1) {
@@ -34,7 +35,8 @@ class ArticleController extends BaseController
         return $this->sendResponse($data, "success-get");
     }
 
-    public function show($slug) {
+    public function show($slug)
+    {
         $data = Article::where('slug', $slug)->first();
         if (!$data) {
             $this->sendError('not-found');
@@ -45,7 +47,8 @@ class ArticleController extends BaseController
         return $this->sendResponse($data, "success-get");
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $rules = [
             'title' => 'required|string|min:5',
             'brief' => 'required|string|min:5',
@@ -75,7 +78,8 @@ class ArticleController extends BaseController
         return $this->sendResponse(true, 'success');
     }
 
-    public function update(Request $request, $slug) {
+    public function update(Request $request, $slug)
+    {
         $rules = [
             'title' => 'required|string|min:5',
             'brief' => 'required|string|min:5',
@@ -110,7 +114,8 @@ class ArticleController extends BaseController
         return $this->sendResponse(true, 'success');
     }
 
-    public function remove(Request $request, $id) {
+    public function remove(Request $request, $id)
+    {
         $article = Article::find($id);
         if (!$article) {
             $this->sendError('not-found');
@@ -121,7 +126,8 @@ class ArticleController extends BaseController
         return $this->sendResponse(true, 'success');
     }
 
-    public function sluging($text) {
+    public function sluging($text)
+    {
         // replace non letter or digits by -
         $text = preg_replace('~[^\pL\d]+~u', '-', $text);
 

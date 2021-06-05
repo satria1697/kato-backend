@@ -10,7 +10,8 @@ class VerificationStatus extends Model
     use HasFactory;
     protected $table="verification_status";
 
-    public function verfication() {
+    public function verfication()
+    {
         return $this->hasMany(VerificationStatus::class, 'id_card_status', 'company_card_status');
     }
 }

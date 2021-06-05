@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Storage;
 
 class GoodsController extends BaseController
 {
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $rules = [
             'image' => 'starts_with:data:image/|nullable',
             'name' => 'required|string',
@@ -49,14 +50,15 @@ class GoodsController extends BaseController
         return $this->sendResponse($goods, 'success');
     }
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $input = $request->all();
 
         $search = $input['search'];
         $filter = $input['filter'];
         $category_id = $input['category'];
 
-        $split = explode(':',$search);
+        $split = explode(':', $search);
         $searchby = 'name';
 
         if (count($split) > 1) {
@@ -87,7 +89,8 @@ class GoodsController extends BaseController
         return $this->sendResponse($goods, 'success');
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $goods = Goods::find($id);
         if (!$goods) {
             return $this->sendError('error', ['error' => 'not-found']);
@@ -98,7 +101,8 @@ class GoodsController extends BaseController
         return $this->sendResponse($id, 'success-delete');
     }
 
-    public function view($id) {
+    public function view($id)
+    {
         $goods = Goods::with('category')->where('id', $id)->first();
         if ($goods['image']) {
             $goods['image'] = 'data:image/jpg;base64,' . base64_encode(Storage::get($goods['image']));
@@ -109,7 +113,8 @@ class GoodsController extends BaseController
         return $this->sendResponse($goods, 'success');
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $rules = [
             'image' => 'starts_with:data:image/|nullable',
             'name' => 'required|string',

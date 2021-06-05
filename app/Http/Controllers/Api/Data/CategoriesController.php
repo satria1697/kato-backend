@@ -9,11 +9,12 @@ use Illuminate\Support\Facades\Validator;
 
 class CategoriesController extends BaseController
 {
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $search = $request->search;
         $filter = $request->filter;
 
-        $split = explode(':',$search);
+        $split = explode(':', $search);
         $searchby = 'name';
 
         if (count($split) > 1) {
@@ -33,7 +34,8 @@ class CategoriesController extends BaseController
         return $this->sendResponse($categories, 'success-get');
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $rules = [
             'name' => 'required|string',
         ];
@@ -53,7 +55,8 @@ class CategoriesController extends BaseController
         return $this->sendResponse(true, 'success-save');
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $data = Categories::where('id', $id)->first();
         if (!$data) {
             return $this->sendError('not-found');
@@ -61,7 +64,8 @@ class CategoriesController extends BaseController
         return $this->sendResponse($data, 'success-get');
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $rules = [
             'name' => 'required|string',
         ];
@@ -80,7 +84,8 @@ class CategoriesController extends BaseController
         return $this->sendResponse(true, 'success-save');
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $data = Categories::where('id', $id)->first();
         if (!$data) {
             return $this->sendError('not-found');
