@@ -54,9 +54,9 @@ class GoodsController extends BaseController
     {
         $input = $request->all();
 
-        $search = $input['search'];
-        $filter = $input['filter'];
-        $category_id = $input['category'];
+        $search = isset($input['search']) ? $input['search'] : false;
+        $filter = isset($input['filter']) ? $input['filter'] : false;
+        $category_id = isset($input['category']) ? $input['category'] : false;
 
         $split = explode(':', $search);
         $searchby = 'name';
