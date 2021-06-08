@@ -78,7 +78,7 @@ class AuthController extends BaseController
             $success['jwt'] = $jwt;
             return $this->sendResponse($success, 'user-login');
         } else {
-            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised'], 200);
         }
     }
 
