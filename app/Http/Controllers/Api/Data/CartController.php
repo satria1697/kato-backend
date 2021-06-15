@@ -102,8 +102,10 @@ class CartController extends BaseController
     {
         $cart = Cart::with('goods', 'status', 'user')->where('id', $request->id)->first();
         $goods = $cart['goods'];
-        if ($goods['image']) {
-            $goods['image'] = 'data:image/png;base64,' . base64_encode(Storage::get($goods['image']));
+        if ($goods) {
+            if ($goods['image']) {
+                $goods['image'] = 'data:image/png;base64,' . base64_encode(Storage::get($goods['image']));
+            }
         }
         $cart['buying'] += 0;
         return $this->sendResponse($cart, 'success');
