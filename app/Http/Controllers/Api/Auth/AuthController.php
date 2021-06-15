@@ -35,11 +35,11 @@ class AuthController extends BaseController
         $user = User::create($input);
         $success['name'] =  $user['name'];
         $success['level'] =  $user['level_id'];
-        $payload = array(
+        $jwtpayload = array(
             "email" => $user['email'],
             "code" => $code
         );
-        $jwt = JWT::encode($payload, $this->key);
+        $jwt = JWT::encode($jwtpayload, $this->key);
         $link = $jwt;
         $web = 'http://localhost:3000/register/verification?key=';
         Mail::to($input['email'])->send(new VerificationMail($web.$link));

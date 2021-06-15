@@ -16,10 +16,10 @@ class GoodsController extends BaseController
             'image' => 'starts_with:data:image/|nullable',
             'name' => 'required|string',
             'description' => 'required|string',
-            'price' => 'required|number',
-            'stock' => 'required|number',
+            'price' => 'required|numeric',
+            'stock' => 'required|numeric',
             'brief' => 'required|string',
-            'categoryId' => 'required|number',
+            'categoryId' => 'required|numeric',
         ];
 
         $input = $request->all();
@@ -119,10 +119,10 @@ class GoodsController extends BaseController
             'image' => 'starts_with:data:image/|nullable',
             'name' => 'required|string',
             'description' => 'required|string',
-            'price' => 'required|number',
-            'stock' => 'required|number',
+            'price' => 'required|numeric',
+            'stock' => 'required|numeric',
             'brief' => 'required|string',
-            'categoryId' => 'required|number',
+            'categoryId' => 'required|numeric',
         ];
 
         $input = $request->all();
