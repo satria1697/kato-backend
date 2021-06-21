@@ -3,7 +3,7 @@
         Options -MultiViews -Indexes
     </IfModule>
 
-    Header set Access-Control-Allow-Origin "*"
+    # Header set Access-Control-Allow-Origin "*"
 
     RewriteEngine On
 
