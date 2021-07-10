@@ -51,8 +51,11 @@ class ArticleController extends BaseController
     {
         $rules = [
             'title' => 'required|string|min:5',
+            'title_id' => 'required|string|min:5',
             'brief' => 'required|string|min:5',
+            'brief_id' => 'required|string|min:5',
             'text' => 'required|string|min:5',
+            'text_id' => 'required|string|min:5',
             'show' => 'required|boolean',
             'image' => 'starts_with:data:image/|nullable'
         ];
@@ -67,8 +70,11 @@ class ArticleController extends BaseController
         $path = $this->base64ToImg('article', $base64);
         $article = new Article();
         $article['title'] = $request['title'];
+        $article['title_id'] = $request['title_id'];
         $article['brief'] = $request['brief'];
+        $article['brief_id'] = $request['brief_id'];
         $article['text'] = $request['text'];
+        $article['text_id'] = $request['text_id'];
         $article['show'] = $request['show'];
         $article['image'] = $path;
         $article['slug'] = $this->sluging($request['title']).'-'.$this->unixNow();
@@ -82,8 +88,11 @@ class ArticleController extends BaseController
     {
         $rules = [
             'title' => 'required|string|min:5',
+            'title_id' => 'required|string|min:5',
             'brief' => 'required|string|min:5',
+            'brief_id' => 'required|string|min:5',
             'text' => 'required|string|min:5',
+            'text_id' => 'required|string|min:5',
             'show' => 'required|boolean',
             'image' => 'starts_with:data:image/|nullable',
             'slug' => 'required|string|min:1',
@@ -104,8 +113,11 @@ class ArticleController extends BaseController
         $base64 = $request['image'];
         $path = $this->base64ToImg('article', $base64);
         $article['title'] = $request['title'];
+        $article['title_id'] = $request['title_id'];
         $article['brief'] = $request['brief'];
+        $article['brief_id'] = $request['brief_id'];
         $article['text'] = $request['text'];
+        $article['text_id'] = $request['text_id'];
         $article['show'] = $request['show'];
         $article['image'] = $path;
         if (!$article->save()) {
