@@ -20,11 +20,11 @@ class CreateCartStatus extends Migration
         });
 
         DB::table('cart_status')->insert(array(
-            ['description' => 'Complete'],
-            ['description' => 'Send'],
-            ['description' => 'Verify'],
-            ['description' => 'Pending'],
-            ['description' => 'Fail'],
+            ['description' => 'Complete', 'description' => 'Selesai'],
+            ['description' => 'Send', 'description' => 'Dikirim'],
+            ['description' => 'Verify', 'description' => 'Terverifikasi'],
+            ['description' => 'Pending', 'description' => 'Menunggu konfirmasi'],
+            ['description' => 'Fail', 'description' => 'Gagal'],
         ));
     }
 

@@ -20,7 +20,7 @@ class CartStatusController extends BaseController
     {
         $rules = [
             'id' => 'required|numeric',
-            'status' => 'required|string',
+            'status' => 'required|numeric',
         ];
 
         $input = $request->all();

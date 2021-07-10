@@ -15,10 +15,13 @@ class GoodsController extends BaseController
         $rules = [
             'image' => 'starts_with:data:image/|nullable',
             'name' => 'required|string',
+            'name_id' => 'required|string',
             'description' => 'required|string',
+            'description_id' => 'required|string',
             'price' => 'required|numeric',
             'stock' => 'required|numeric',
             'brief' => 'required|string',
+            'brief_id' => 'required|string',
             'categoryId' => 'required|numeric',
         ];
 
@@ -38,11 +41,14 @@ class GoodsController extends BaseController
         }
         $goods = new Goods();
         $goods['name'] = $input['name'];
+        $goods['name_id'] = $input['name_id'];
         $goods['description'] = $input['description'];
+        $goods['description_id'] = $input['description_id'];
         $goods['price'] = $input['price'];
         $goods['stock'] = $input['stock'];
         $goods['image'] = $path;
         $goods['brief'] = $input['brief'];
+        $goods['brief_id'] = $input['brief_id'];
         $goods['category_id'] = $input['categoryId'];
         if (!$goods->save()) {
             return $this->sendError('error', ['error' => 'error-save']);
@@ -69,6 +75,10 @@ class GoodsController extends BaseController
         $goods = Goods::query();
         if ($search) {
             $goods->where($searchby, 'like', '%'.$search.'%');
+        }
+
+        if ($search && ($searchby === "name" || $searchby === "description" || $searchby === "brief")) {
+            $goods->orwhere($searchby.'id', 'like', '%'.$search.'%');
         }
         if ($category_id) {
             $goods = $goods->where('category_id', $category_id);
@@ -118,10 +128,13 @@ class GoodsController extends BaseController
         $rules = [
             'image' => 'starts_with:data:image/|nullable',
             'name' => 'required|string',
+            'name_id' => 'required|string',
             'description' => 'required|string',
+            'description_id' => 'required|string',
             'price' => 'required|numeric',
             'stock' => 'required|numeric',
             'brief' => 'required|string',
+            'brief_id' => 'required|string',
             'categoryId' => 'required|numeric',
         ];
 
@@ -147,10 +160,13 @@ class GoodsController extends BaseController
         }
         $goods['image'] = $path;
         $goods['name'] = $request['name'];
+        $goods['name_id'] = $request['name_id'];
         $goods['description'] = $request['description'];
+        $goods['description_id'] = $request['description_id'];
         $goods['price'] = $request['price'];
         $goods['stock'] = $request['stock'];
         $goods['brief'] = $request['brief'];
+        $goods['brief_id'] = $request['brief_id'];
         $goods['category_id'] = $request['categoryId'];
         if (!$goods->save()) {
             return $this->sendError('error-save');

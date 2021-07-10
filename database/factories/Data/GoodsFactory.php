@@ -23,12 +23,15 @@ class GoodsFactory extends Factory
     {
         return [
             'name' => $this->faker->text(10),
+            'name_id' => $this->faker->text(10),
             'description' => $this->faker->text(40),
+            'description_id' => $this->faker->text(40),
             'price' => $this->faker->numberBetween(1, 30),
             'stock' => $this->faker->numberBetween(0, 100),
             'image' => null,
             'category_id' => $this->faker->numberBetween(1,3),
-            'brief' => $this->faker->text(20)
+            'brief' => $this->faker->text(20),
+            'brief_id' => $this->faker->text(20)
         ];
     }
 }

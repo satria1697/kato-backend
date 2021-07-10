@@ -26,6 +26,10 @@ class ArticleController extends BaseController
         if ($search) {
             $article->where($searchby, 'like', '%'.$search.'%');
         }
+        if ($search && ($searchby === "title" || $searchby === "text" || $searchby === "brief")) {
+            $article->orWhere($searchby.'_id', 'like', '%'.$search.'%');
+        }
+
         $data = $article->get();
         foreach ($data as $da) {
             if ($da['image']) {

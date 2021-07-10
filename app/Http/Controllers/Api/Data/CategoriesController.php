@@ -27,6 +27,9 @@ class CategoriesController extends BaseController
         if ($search) {
             $categories->where($searchby, 'like', '%'.$search.'%');
         }
+        if ($search && $searchby === "name") {
+            $categories->where($searchby.'_id', 'like', '%'.$search.'%');
+        }
         if ($filter) {
             $categories = $categories->where('show', 1);
         }
@@ -38,6 +41,7 @@ class CategoriesController extends BaseController
     {
         $rules = [
             'name' => 'required|string',
+            'name_id' => 'required|string',
         ];
 
         $input = $request->all();
@@ -48,6 +52,7 @@ class CategoriesController extends BaseController
 
         $data = new Categories();
         $data['name'] = $input['name'];
+        $data['name_id'] = $input['name_id'];
         $data['show'] = 1;
         if (!$data->save()) {
             return $this->sendError('cant-save');
@@ -68,6 +73,7 @@ class CategoriesController extends BaseController
     {
         $rules = [
             'name' => 'required|string',
+            'name_id' => 'required|string_id',
         ];
 
         $input = $request->all();

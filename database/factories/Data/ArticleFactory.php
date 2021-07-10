@@ -23,10 +23,13 @@ class ArticleFactory extends Factory
     {
         return [
             'title' => $this->faker->text(15),
+            'title_id' => $this->faker->text(15),
             'text' => $this->faker->text(150),
+            'text_id' => $this->faker->text(150),
             'show' => 1,
             'image' => null,
             'brief' => $this->faker->text(20),
+            'brief_id' => $this->faker->text(20),
             'slug' => $this->faker->slug()
         ];
     }
