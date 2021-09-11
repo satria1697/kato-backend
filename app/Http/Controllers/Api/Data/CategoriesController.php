@@ -73,7 +73,7 @@ class CategoriesController extends BaseController
     {
         $rules = [
             'name' => 'required|string',
-            'name_id' => 'required|string_id',
+            'name_id' => 'required|string',
         ];
 
         $input = $request->all();
