@@ -84,6 +84,7 @@ class CategoriesController extends BaseController
 
         $data = Categories::where('id', $id)->first();
         $data['name'] = $input['name'];
+        $data['name_id'] = $input['name_id'];
         if (!$data->save()) {
             return $this->sendError('cant-save');
         }

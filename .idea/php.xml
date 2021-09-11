@@ -123,6 +123,7 @@
       <path value="$PROJECT_DIR$/vendor/psr/http-factory" />
       <path value="$PROJECT_DIR$/vendor/symfony/psr-http-message-bridge" />
       <path value="$PROJECT_DIR$/vendor/adhocore/jwt" />
+      <path value="$PROJECT_DIR$/vendor/squizlabs/php_codesniffer" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.3" />
